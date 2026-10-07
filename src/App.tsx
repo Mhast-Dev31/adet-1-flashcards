@@ -1,0 +1,1143 @@
+import { useMemo, useState } from 'react';
+import {
+  CheckCircle2,
+  RotateCcw,
+  XCircle,
+  Layers3,
+  Trophy,
+  BookOpen,
+} from 'lucide-react';
+
+type Card = {
+  id: number;
+  topic: string;
+  question: string;
+  choices: string[];
+  answer: string;
+  explanation: string;
+};
+
+const CARDS: Card[] = [
+  {
+    id: 1,
+    topic: 'Application Development',
+    question: 'What is an application?',
+    choices: [
+      'A software program that performs specific tasks',
+      'A physical computer component',
+      'A database table only',
+      'A network cable',
+    ],
+    answer: 'A software program that performs specific tasks',
+    explanation:
+      'An application is software that allows users to perform specific tasks.',
+  },
+  {
+    id: 2,
+    topic: 'Application Development',
+    question: 'What is application development?',
+    choices: [
+      'Planning, designing, creating, testing, and deploying an application',
+      'Only writing HTML',
+      'Only fixing hardware',
+      'Only creating a database',
+    ],
+    answer:
+      'Planning, designing, creating, testing, and deploying an application',
+    explanation:
+      'Application development covers the full software creation process: plan, design, create, test, deploy.',
+  },
+  {
+    id: 3,
+    topic: 'Application Development',
+    question:
+      'Creating a website accessed through Chrome is an example of what type of development?',
+    choices: [
+      'Web Development',
+      'Desktop Application Development',
+      'Game Development',
+      'Cloud Development',
+    ],
+    answer: 'Web Development',
+    explanation: 'Web development creates websites and web applications.',
+  },
+  {
+    id: 4,
+    topic: 'Front-End vs Back-End',
+    question: 'Which side focuses on what users see and interact with?',
+    choices: [
+      'Front-end',
+      'Back-end',
+      'Database layer only',
+      'Version control',
+    ],
+    answer: 'Front-end',
+    explanation:
+      'Front-end development covers the user-facing interface and interactions.',
+  },
+  {
+    id: 5,
+    topic: 'Front-End vs Back-End',
+    question:
+      'A developer writes code that checks a username and password against a database. What is this?',
+    choices: [
+      'Back-end development',
+      'Front-end styling',
+      'HTML structure',
+      'CSS layout',
+    ],
+    answer: 'Back-end development',
+    explanation:
+      'Authentication and database processing are server-side responsibilities.',
+  },
+  {
+    id: 6,
+    topic: 'HTML Basics',
+    question: 'What does HTML stand for?',
+    choices: [
+      'HyperText Markup Language',
+      'High Transfer Machine Language',
+      'Hyperlink Text Management Language',
+      'Home Tool Markup Language',
+    ],
+    answer: 'HyperText Markup Language',
+    explanation:
+      'HTML is the standard markup language for structuring web pages.',
+  },
+  {
+    id: 7,
+    topic: 'HTML Basics',
+    question: 'What is the main purpose of HTML?',
+    choices: [
+      'Define webpage structure and content',
+      'Control database authentication',
+      'Track Git history',
+      'Create server APIs',
+    ],
+    answer: 'Define webpage structure and content',
+    explanation: 'HTML provides the structure or skeleton of a webpage.',
+  },
+  {
+    id: 8,
+    topic: 'HTML Tags & Elements',
+    question: 'In <p>Hello World</p>, what is <p>?',
+    choices: [
+      'The opening tag',
+      'The content',
+      'The closing tag',
+      'An attribute',
+    ],
+    answer: 'The opening tag',
+    explanation: 'The opening tag starts the paragraph element.',
+  },
+  {
+    id: 9,
+    topic: 'HTML Attributes',
+    question: 'Which attribute specifies the destination URL of a link?',
+    choices: ['href', 'src', 'alt', 'class'],
+    answer: 'href',
+    explanation: 'href tells the browser where an anchor link should go.',
+  },
+  {
+    id: 10,
+    topic: 'HTML Attributes',
+    question: 'Which attribute specifies the source/location of an image?',
+    choices: ['src', 'href', 'alt', 'id'],
+    answer: 'src',
+    explanation: 'src points to the image resource.',
+  },
+  {
+    id: 11,
+    topic: 'HTML Attributes',
+    question: 'What is the purpose of alt in an <img> element?',
+    choices: [
+      'Provide alternative text',
+      'Set the image URL',
+      'Make the image a link',
+      'Change the image width',
+    ],
+    answer: 'Provide alternative text',
+    explanation: 'alt provides alternative text for the image.',
+  },
+  {
+    id: 12,
+    topic: 'HTML Structure',
+    question: 'Which HTML section contains visible webpage content?',
+    choices: ['<body>', '<head>', '<html>', '<meta>'],
+    answer: '<body>',
+    explanation: 'The body contains content that appears on the page.',
+  },
+  {
+    id: 13,
+    topic: 'HTML Structure',
+    question:
+      'Which HTML section contains metadata, title, and links to stylesheets?',
+    choices: ['<head>', '<body>', '<footer>', '<main>'],
+    answer: '<head>',
+    explanation:
+      'The head contains document metadata and resources such as CSS links.',
+  },
+  {
+    id: 14,
+    topic: 'HTML Lists',
+    question: 'Which tag creates an unordered bullet list?',
+    choices: ['<ul>', '<ol>', '<li>', '<list>'],
+    answer: '<ul>',
+    explanation: '<ul> means unordered list.',
+  },
+  {
+    id: 15,
+    topic: 'HTML Lists',
+    question: 'Which tag creates a numbered list?',
+    choices: ['<ol>', '<ul>', '<li>', '<num>'],
+    answer: '<ol>',
+    explanation: '<ol> means ordered list.',
+  },
+  {
+    id: 16,
+    topic: 'HTML Forms',
+    question: 'Which tag defines a form used to collect user input?',
+    choices: ['<form>', '<input>', '<collect>', '<data>'],
+    answer: '<form>',
+    explanation: 'The form element groups and defines user input controls.',
+  },
+  {
+    id: 17,
+    topic: 'HTML Forms',
+    question: 'Which input type is appropriate for passwords?',
+    choices: ['password', 'secret', 'hidden-text', 'secure'],
+    answer: 'password',
+    explanation: '<input type="password"> masks typed characters.',
+  },
+  {
+    id: 18,
+    topic: 'CSS Basics',
+    question: 'What does CSS stand for?',
+    choices: [
+      'Cascading Style Sheets',
+      'Computer Style Syntax',
+      'Coded Style System',
+      'Cascading Script Sheets',
+    ],
+    answer: 'Cascading Style Sheets',
+    explanation: 'CSS controls the appearance and formatting of HTML elements.',
+  },
+  {
+    id: 19,
+    topic: 'CSS Basics',
+    question: 'What does CSS primarily control?',
+    choices: [
+      'Appearance and style',
+      'Database records',
+      'Git commits',
+      'Server authentication',
+    ],
+    answer: 'Appearance and style',
+    explanation:
+      'CSS handles color, spacing, typography, layout, borders, and more.',
+  },
+  {
+    id: 20,
+    topic: 'CSS Syntax',
+    question: 'In p { color: red; }, what is p?',
+    choices: ['Selector', 'Property', 'Value', 'Declaration block'],
+    answer: 'Selector',
+    explanation: 'The selector identifies which elements receive the style.',
+  },
+  {
+    id: 21,
+    topic: 'CSS Syntax',
+    question: 'In p { color: red; }, what is color?',
+    choices: ['Property', 'Selector', 'Value', 'Element'],
+    answer: 'Property',
+    explanation: 'color is the CSS property being set.',
+  },
+  {
+    id: 22,
+    topic: 'CSS Syntax',
+    question: 'In p { color: red; }, what is red?',
+    choices: ['Value', 'Property', 'Selector', 'Pseudo-class'],
+    answer: 'Value',
+    explanation: 'red is the value assigned to the color property.',
+  },
+  {
+    id: 23,
+    topic: 'CSS Methods',
+    question:
+      'Which CSS method places styles directly inside an HTML element using style="..."?',
+    choices: [
+      'Inline CSS',
+      'Internal CSS',
+      'External CSS',
+      'Embedded JavaScript',
+    ],
+    answer: 'Inline CSS',
+    explanation: 'Inline CSS is written directly on the element.',
+  },
+  {
+    id: 24,
+    topic: 'CSS Methods',
+    question:
+      'Which method uses a separate .css file linked with <link rel="stylesheet" href="style.css">?',
+    choices: ['External CSS', 'Inline CSS', 'Internal CSS', 'Browser CSS'],
+    answer: 'External CSS',
+    explanation:
+      'External CSS stores reusable styles in a separate stylesheet.',
+  },
+  {
+    id: 25,
+    topic: 'CSS Selectors',
+    question: 'Which selector targets elements with a class named important?',
+    choices: ['.important', '#important', '*important', ':important'],
+    answer: '.important',
+    explanation: 'A class selector starts with a period.',
+  },
+  {
+    id: 26,
+    topic: 'CSS Selectors',
+    question: 'Which selector targets the element with id="title"?',
+    choices: ['#title', '.title', '*title', ':title'],
+    answer: '#title',
+    explanation: 'An ID selector starts with #.',
+  },
+  {
+    id: 27,
+    topic: 'CSS Selectors',
+    question: 'Which selector targets all elements?',
+    choices: ['*', '#', '.', ':'],
+    answer: '*',
+    explanation: 'The universal selector * matches all elements.',
+  },
+  {
+    id: 28,
+    topic: 'CSS Pseudo-Classes',
+    question: 'What does button:hover represent?',
+    choices: [
+      'A pseudo-class for a hover state',
+      'A pseudo-element',
+      'An ID selector',
+      'An HTML attribute',
+    ],
+    answer: 'A pseudo-class for a hover state',
+    explanation:
+      'Pseudo-classes describe special states such as hover, active, visited, and link.',
+  },
+  {
+    id: 29,
+    topic: 'CSS Pseudo-Elements',
+    question: 'Which is a pseudo-element?',
+    choices: ['::before', ':hover', '.before', '#before'],
+    answer: '::before',
+    explanation:
+      'Pseudo-elements use double colons and style a specific part of an element.',
+  },
+  {
+    id: 30,
+    topic: 'CSS Specificity',
+    question: 'Which is more specific: .text or #special?',
+    choices: [
+      '#special',
+      '.text',
+      'They are equal',
+      'It depends on the property',
+    ],
+    answer: '#special',
+    explanation: 'An ID selector has higher specificity than a class selector.',
+  },
+  {
+    id: 31,
+    topic: 'CSS Specificity',
+    question: 'When two CSS rules have equal specificity, which rule wins?',
+    choices: [
+      'The later rule',
+      'The first rule',
+      'The shorter rule',
+      'The rule with fewer properties',
+    ],
+    answer: 'The later rule',
+    explanation:
+      'When specificity is equal, source order decides and the later rule wins.',
+  },
+  {
+    id: 32,
+    topic: 'CSS Box Model',
+    question: 'Which box-model area is immediately outside the content?',
+    choices: ['Padding', 'Margin', 'Border', 'Viewport'],
+    answer: 'Padding',
+    explanation: 'Padding is the space between content and the border.',
+  },
+  {
+    id: 33,
+    topic: 'CSS Box Model',
+    question: 'Which box-model area is outside the border?',
+    choices: ['Margin', 'Padding', 'Content', 'Width'],
+    answer: 'Margin',
+    explanation: 'Margin creates space outside the element border.',
+  },
+  {
+    id: 34,
+    topic: 'CSS Box Model',
+    question: 'What is the correct order from inside to outside?',
+    choices: [
+      'Content → Padding → Border → Margin',
+      'Content → Margin → Padding → Border',
+      'Padding → Content → Margin → Border',
+      'Border → Padding → Content → Margin',
+    ],
+    answer: 'Content → Padding → Border → Margin',
+    explanation: 'Memorize the box-model order from inside outward.',
+  },
+  {
+    id: 35,
+    topic: 'CSS Units',
+    question: 'Which unit is relative to the root html font size?',
+    choices: ['rem', 'em', 'px', 'vw'],
+    answer: 'rem',
+    explanation: 'rem is relative to the root html element font size.',
+  },
+  {
+    id: 36,
+    topic: 'CSS Units',
+    question: 'Which unit is relative to the parent element font size?',
+    choices: ['em', 'rem', 'vh', 'px'],
+    answer: 'em',
+    explanation:
+      'em is based on the font size of the parent element in the relevant context.',
+  },
+  {
+    id: 37,
+    topic: 'CSS Units',
+    question: 'Which unit is relative to the viewport width?',
+    choices: ['vw', 'vh', 'rem', '%'],
+    answer: 'vw',
+    explanation: 'vw represents a percentage of viewport width.',
+  },
+  {
+    id: 38,
+    topic: 'CSS Colors',
+    question: 'Which color format uses Red, Green, and Blue numeric channels?',
+    choices: ['RGB', 'HSL', 'HEX', 'EM'],
+    answer: 'RGB',
+    explanation: 'RGB stands for red, green, and blue.',
+  },
+  {
+    id: 39,
+    topic: 'CSS Colors',
+    question: 'What does the A represent in RGBA?',
+    choices: ['Alpha/transparency', 'Alignment', 'Animation', 'Attribute'],
+    answer: 'Alpha/transparency',
+    explanation: 'The alpha channel controls transparency.',
+  },
+  {
+    id: 40,
+    topic: 'CSS Layout',
+    question: 'Which display value turns an element into a flex container?',
+    choices: [
+      'display: flex;',
+      'display: block;',
+      'display: inline;',
+      'display: none;',
+    ],
+    answer: 'display: flex;',
+    explanation: 'display:flex activates Flexbox for the container.',
+  },
+  {
+    id: 41,
+    topic: 'Flexbox',
+    question:
+      'In a row flex container, which property aligns items along the main horizontal axis?',
+    choices: ['justify-content', 'align-items', 'gap', 'position'],
+    answer: 'justify-content',
+    explanation: 'With flex-direction: row, the main axis is horizontal.',
+  },
+  {
+    id: 42,
+    topic: 'Flexbox',
+    question: 'Which value puts maximum available space between flex items?',
+    choices: ['space-between', 'center-between', 'spread', 'space-max'],
+    answer: 'space-between',
+    explanation:
+      'justify-content: space-between distributes the extra space between items.',
+  },
+  {
+    id: 43,
+    topic: 'CSS Positioning',
+    question: 'Which position value is the default positioning mode?',
+    choices: ['static', 'relative', 'absolute', 'fixed'],
+    answer: 'static',
+    explanation: 'position: static is the default.',
+  },
+  {
+    id: 44,
+    topic: 'CSS Positioning',
+    question:
+      'Which position keeps an element fixed relative to the viewport while scrolling?',
+    choices: ['fixed', 'absolute', 'relative', 'static'],
+    answer: 'fixed',
+    explanation: 'position: fixed anchors the element to the viewport.',
+  },
+  {
+    id: 45,
+    topic: 'CSS Transforms',
+    question: 'Which transform moves an element horizontally?',
+    choices: ['translateX()', 'scale()', 'rotate()', 'translateZ()'],
+    answer: 'translateX()',
+    explanation: 'translateX moves an element along the horizontal axis.',
+  },
+  {
+    id: 46,
+    topic: 'CSS Transforms',
+    question: 'Which transform makes an element larger or smaller?',
+    choices: ['scale()', 'rotate()', 'translateY()', 'skew-only()'],
+    answer: 'scale()',
+    explanation: 'scale() changes the visual size of an element.',
+  },
+  {
+    id: 47,
+    topic: 'Responsive Design',
+    question: 'What does responsive design mean?',
+    choices: [
+      'A website adapts to different screen sizes and devices',
+      'A site only works on desktop',
+      'A site changes database tables',
+      'A site automatically uses Git',
+    ],
+    answer: 'A website adapts to different screen sizes and devices',
+    explanation:
+      'Responsive design keeps the interface usable across desktop, tablet, and mobile screens.',
+  },
+  {
+    id: 48,
+    topic: 'Responsive Design',
+    question: 'What does @media (max-width: 768px) generally mean?',
+    choices: [
+      'Apply styles when the viewport is 768px wide or smaller',
+      'Only apply styles above 768px',
+      'Hide the page at 768px',
+      'Set the page width to exactly 768px',
+    ],
+    answer: 'Apply styles when the viewport is 768px wide or smaller',
+    explanation: 'A max-width media query targets that width and below.',
+  },
+  {
+    id: 49,
+    topic: 'Git Basics',
+    question: 'What is Git?',
+    choices: [
+      'A distributed version control system',
+      'A web browser',
+      'A programming language',
+      'A database engine',
+    ],
+    answer: 'A distributed version control system',
+    explanation:
+      'Git tracks file changes, history, branches, and collaboration workflows.',
+  },
+  {
+    id: 50,
+    topic: 'Git Basics',
+    question: 'What is GitHub?',
+    choices: [
+      'A web-based platform for hosting Git repositories and collaboration',
+      'The Git command-line executable',
+      'A CSS framework',
+      'A local database',
+    ],
+    answer:
+      'A web-based platform for hosting Git repositories and collaboration',
+    explanation:
+      'GitHub provides remote repositories plus collaboration features such as pull requests and issues.',
+  },
+  {
+    id: 51,
+    topic: 'Git Core Concepts',
+    question: 'What is a repository?',
+    choices: [
+      'A collection of project files tracked by Git',
+      'A single commit message',
+      'A CSS selector',
+      'A remote URL only',
+    ],
+    answer: 'A collection of project files tracked by Git',
+    explanation:
+      'A repository stores project files along with Git history and configuration.',
+  },
+  {
+    id: 52,
+    topic: 'Git Core Concepts',
+    question: 'What is a commit?',
+    choices: [
+      'A snapshot of the project at a point in time',
+      'A branch switch',
+      'A remote server',
+      'A merge conflict',
+    ],
+    answer: 'A snapshot of the project at a point in time',
+    explanation: 'A commit records staged changes in Git history.',
+  },
+  {
+    id: 53,
+    topic: 'Git Core Concepts',
+    question: 'What is a branch?',
+    choices: [
+      'A separate line of development',
+      'A saved password',
+      'A staging command',
+      'A remote repository',
+    ],
+    answer: 'A separate line of development',
+    explanation:
+      'Branches let developers work independently on features or fixes.',
+  },
+  {
+    id: 54,
+    topic: 'Git Core Concepts',
+    question: 'What does the staging area do?',
+    choices: [
+      'Prepares selected changes for the next commit',
+      'Publishes changes to GitHub',
+      'Deletes all files',
+      'Creates a database',
+    ],
+    answer: 'Prepares selected changes for the next commit',
+    explanation: 'git add places changes into the staging area before commit.',
+  },
+  {
+    id: 55,
+    topic: 'Git Commands',
+    question: 'Which command initializes a new Git repository?',
+    choices: ['git init', 'git start', 'git create', 'git repo'],
+    answer: 'git init',
+    explanation:
+      'git init creates the Git repository metadata, including the .git directory.',
+  },
+  {
+    id: 56,
+    topic: 'Git Commands',
+    question: 'Which command shows modified, staged, and untracked files?',
+    choices: ['git status', 'git show', 'git inspect', 'git state'],
+    answer: 'git status',
+    explanation:
+      'git status reports the current state of the working tree and staging area.',
+  },
+  {
+    id: 57,
+    topic: 'Git Commands',
+    question: 'Which command stages all current changes?',
+    choices: ['git add .', 'git stage all', 'git commit .', 'git push .'],
+    answer: 'git add .',
+    explanation: 'git add . stages changes in the current directory tree.',
+  },
+  {
+    id: 58,
+    topic: 'Git Commands',
+    question: 'Which command creates a commit with a message?',
+    choices: [
+      'git commit -m "message"',
+      'git save -m "message"',
+      'git push -m "message"',
+      'git snapshot "message"',
+    ],
+    answer: 'git commit -m "message"',
+    explanation:
+      'git commit records staged changes, and -m supplies the commit message.',
+  },
+  {
+    id: 59,
+    topic: 'Git Commands',
+    question: 'Which command shows commit history?',
+    choices: ['git log', 'git history', 'git commits', 'git timeline'],
+    answer: 'git log',
+    explanation: 'git log displays commit history.',
+  },
+  {
+    id: 60,
+    topic: 'Git Commands',
+    question: 'Which command shows differences in changes?',
+    choices: ['git diff', 'git compare', 'git changes', 'git inspect'],
+    answer: 'git diff',
+    explanation: 'git diff shows differences between file states.',
+  },
+  {
+    id: 61,
+    topic: 'Git Branching',
+    question: 'Which command creates a branch named feature?',
+    choices: [
+      'git branch feature',
+      'git new feature',
+      'git checkout --new feature',
+      'git make-branch feature',
+    ],
+    answer: 'git branch feature',
+    explanation: 'git branch feature creates the branch.',
+  },
+  {
+    id: 62,
+    topic: 'Git Branching',
+    question:
+      'Which command switches to an existing feature branch in the module?',
+    choices: [
+      'git checkout feature',
+      'git branch --move feature',
+      'git use feature',
+      'git switchto feature',
+    ],
+    answer: 'git checkout feature',
+    explanation: 'The module teaches git checkout to switch branches.',
+  },
+  {
+    id: 63,
+    topic: 'Git Merging',
+    question:
+      'Which command combines changes from feature into the current branch?',
+    choices: [
+      'git merge feature',
+      'git combine feature',
+      'git join feature',
+      'git attach feature',
+    ],
+    answer: 'git merge feature',
+    explanation: 'git merge integrates another branch into the current branch.',
+  },
+  {
+    id: 64,
+    topic: 'Git Merge Conflicts',
+    question: 'What is a merge conflict?',
+    choices: [
+      'Git cannot automatically combine conflicting changes',
+      'A repository has no branches',
+      'A commit has a long message',
+      'GitHub is offline',
+    ],
+    answer: 'Git cannot automatically combine conflicting changes',
+    explanation:
+      'Conflicts commonly occur when different branches change the same part of a file incompatibly.',
+  },
+  {
+    id: 65,
+    topic: 'Git Merge Conflicts',
+    question:
+      'After manually resolving a conflict, what should you generally do before the final commit?',
+    choices: [
+      'Stage the resolved file with git add',
+      'Delete the repository',
+      'Run git init again',
+      'Push without staging',
+    ],
+    answer: 'Stage the resolved file with git add',
+    explanation:
+      'After editing the conflict markers and saving, stage the resolved file, then commit.',
+  },
+  {
+    id: 66,
+    topic: 'Git Remote',
+    question: 'What does git remote add origin <repository-url> do?',
+    choices: [
+      'Connects the local repository to a remote repository named origin',
+      'Creates a local branch named origin',
+      'Uploads files immediately',
+      'Deletes the remote',
+    ],
+    answer:
+      'Connects the local repository to a remote repository named origin',
+    explanation: 'origin is the common name for the remote repository.',
+  },
+  {
+    id: 67,
+    topic: 'GitHub Push & Pull',
+    question: 'What does git push do?',
+    choices: [
+      'Sends local commits to the remote repository',
+      'Downloads remote changes',
+      'Creates a merge conflict',
+      'Stages files',
+    ],
+    answer: 'Sends local commits to the remote repository',
+    explanation: 'Push moves your local commits to the remote.',
+  },
+  {
+    id: 68,
+    topic: 'GitHub Push & Pull',
+    question: 'What does git pull do?',
+    choices: [
+      'Gets remote changes and integrates them into the local branch',
+      'Uploads local commits',
+      'Creates a branch',
+      'Unstages files',
+    ],
+    answer: 'Gets remote changes and integrates them into the local branch',
+    explanation: 'Pull brings remote changes into your local work.',
+  },
+  {
+    id: 69,
+    topic: 'GitHub Collaboration',
+    question:
+      'You finished a feature branch and want teammates to review it before merging into main. What should you use?',
+    choices: ['Pull Request', 'git init', 'git reset', '.gitignore'],
+    answer: 'Pull Request',
+    explanation:
+      'A pull request is used to propose, discuss, review, and merge changes.',
+  },
+  {
+    id: 70,
+    topic: 'GitHub Collaboration',
+    question: 'What are GitHub Issues mainly used for?',
+    choices: [
+      'Tracking bugs, feature requests, and tasks',
+      'Changing CSS colors',
+      'Creating HTML headings',
+      'Running the database',
+    ],
+    answer: 'Tracking bugs, feature requests, and tasks',
+    explanation: 'Issues help teams organize and track work.',
+  },
+  {
+    id: 71,
+    topic: 'GitHub',
+    question: 'What is GitHub Pages used for?',
+    choices: [
+      'Hosting static websites from a GitHub repository',
+      'Storing database passwords',
+      'Creating private Git commits',
+      'Managing CSS selectors',
+    ],
+    answer: 'Hosting static websites from a GitHub repository',
+    explanation: 'GitHub Pages can publish static web content.',
+  },
+  {
+    id: 72,
+    topic: 'Git Best Practices',
+    question: 'What is the purpose of .gitignore?',
+    choices: [
+      'Tell Git which files or directories to ignore',
+      'Delete Git history',
+      'Create a pull request',
+      'Force every file to be committed',
+    ],
+    answer: 'Tell Git which files or directories to ignore',
+    explanation:
+      '.gitignore can exclude items such as node_modules, .env, build files, or local config.',
+  },
+  {
+    id: 73,
+    topic: 'Git Best Practices',
+    question: 'Which is the better commit message?',
+    choices: ['Add user login form', 'stuff', 'changes', 'update'],
+    answer: 'Add user login form',
+    explanation:
+      'Commit messages should be clear, concise, descriptive, and use an imperative style.',
+  },
+  {
+    id: 74,
+    topic: 'Git Best Practices',
+    question: 'Which branch name best communicates its purpose?',
+    choices: ['feature/add-login', 'branch1', 'test', 'stuff'],
+    answer: 'feature/add-login',
+    explanation: 'Descriptive branch names communicate intent clearly.',
+  },
+  {
+    id: 75,
+    topic: 'Undoing Changes',
+    question: 'Which command is commonly used to unstage a file?',
+    choices: [
+      'git reset file.txt',
+      'git revert file.txt',
+      'git push file.txt',
+      'git init file.txt',
+    ],
+    answer: 'git reset file.txt',
+    explanation:
+      'git reset file.txt can remove the file from staging while keeping the working changes.',
+  },
+  {
+    id: 76,
+    topic: 'Undoing Changes',
+    question: 'What is a key difference between git reset and git revert?',
+    choices: [
+      'revert creates a new commit that undoes an earlier commit',
+      'reset always uploads to GitHub',
+      'revert only changes CSS',
+      'reset creates a new pull request',
+    ],
+    answer: 'revert creates a new commit that undoes an earlier commit',
+    explanation:
+      'git revert preserves history by adding a new reversing commit.',
+  },
+  {
+    id: 77,
+    topic: 'Exam Scenarios',
+    question:
+      'A developer changes a button from blue to red. Which area is most directly involved?',
+    choices: [
+      'Front-end / CSS',
+      'Back-end / database',
+      'Git remote',
+      'Merge conflict resolution',
+    ],
+    answer: 'Front-end / CSS',
+    explanation:
+      'Button appearance is user-facing styling handled by CSS on the front end.',
+  },
+  {
+    id: 78,
+    topic: 'Exam Scenarios',
+    question:
+      'A developer changes the same line on two branches and Git cannot decide which version to keep. What happened?',
+    choices: [
+      'Merge conflict',
+      'Responsive design',
+      'CSS specificity',
+      'Staging',
+    ],
+    answer: 'Merge conflict',
+    explanation:
+      'Git needs manual resolution when changes cannot be automatically combined.',
+  },
+  {
+    id: 79,
+    topic: 'Exam Scenarios',
+    question:
+      'A website looks good on desktop but is hard to use on a phone. What concept should be applied?',
+    choices: [
+      'Responsive design',
+      'Git branching',
+      'HTML attributes',
+      'Database normalization',
+    ],
+    answer: 'Responsive design',
+    explanation:
+      'Responsive design adapts layouts and interactions to smaller screens.',
+  },
+  {
+    id: 80,
+    topic: 'Exam Scenarios',
+    question:
+      'You save staged changes locally, then want to send those commits to GitHub. Which sequence is correct?',
+    choices: [
+      'git commit, then git push',
+      'git push, then git commit',
+      'git pull, then git init',
+      'git reset, then git add',
+    ],
+    answer: 'git commit, then git push',
+    explanation:
+      'A commit records the staged changes locally; push sends those commits to the remote.',
+  },
+];
+
+const topics = ['All', ...Array.from(new Set(CARDS.map(card => card.topic)))];
+
+function App() {
+  const [topic, setTopic] = useState('All');
+  const [current, setCurrent] = useState(0);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [score, setScore] = useState(0);
+
+  const filtered = useMemo(
+    () =>
+      topic === 'All' ? CARDS : CARDS.filter(card => card.topic === topic),
+    [topic]
+  );
+
+  const card = filtered[current % filtered.length];
+  const answered = selected !== null;
+  const isCorrect = selected === card.answer;
+
+  const chooseAnswer = (choice: string) => {
+    if (answered) return;
+    setSelected(choice);
+    if (choice === card.answer) setScore(value => value + 1);
+  };
+
+  const next = () => {
+    setCurrent(value => value + 1);
+    setSelected(null);
+  };
+
+  const restart = () => {
+    setCurrent(0);
+    setSelected(null);
+    setScore(0);
+  };
+
+  const changeTopic = (value: string) => {
+    setTopic(value);
+    setCurrent(0);
+    setSelected(null);
+    setScore(0);
+  };
+
+  return (
+    <main className="min-h-screen bg-slate-950 text-slate-100">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-violet-400/20 bg-violet-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-violet-200">
+              <BookOpen size={14} /> ADET 1 Exam Review
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Flashcards
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-400">
+              Gizmo-style multiple-choice review based on your ADET 1 reviewer:
+              HTML, CSS, Flexbox, responsive design, Git, GitHub, and scenarios.
+            </p>
+          </div>
+          <button
+            onClick={restart}
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+          >
+            <RotateCcw size={16} /> Restart
+          </button>
+        </header>
+
+        <section className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <Layers3 size={16} /> Topic
+            </div>
+            <select
+              value={topic}
+              onChange={event => changeTopic(event.target.value)}
+              className="mt-2 w-full rounded-xl border border-white/10 bg-slate-900 px-3 py-2.5 text-sm outline-none ring-violet-400/30 focus:ring-2"
+            >
+              {topics.map(item => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-sm text-slate-400">Progress</div>
+            <div className="mt-2 flex items-end justify-between">
+              <div className="text-2xl font-bold">
+                {(current % filtered.length) + 1}{' '}
+                <span className="text-base font-medium text-slate-500">
+                  / {filtered.length}
+                </span>
+              </div>
+              <div className="text-sm text-slate-400">
+                {Math.round(
+                  (((current % filtered.length) + 1) / filtered.length) * 100
+                )}
+                %
+              </div>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full rounded-full bg-violet-500 transition-all"
+                style={{
+                  width:
+                    (((current % filtered.length) + 1) / filtered.length) *
+                      100 +
+                    '%',
+                }}
+              />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <Trophy size={16} /> Score
+            </div>
+            <div className="mt-2 text-2xl font-bold">{score}</div>
+            <div className="mt-1 text-xs text-slate-500">
+              Correct answers this session
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-5 shadow-2xl sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span className="rounded-full bg-violet-500/10 px-3 py-1 text-xs font-semibold text-violet-200">
+              {card.topic}
+            </span>
+            {answered && (
+              <span
+                className={
+                  'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ' +
+                  (isCorrect
+                    ? 'bg-emerald-500/10 text-emerald-300'
+                    : 'bg-rose-500/10 text-rose-300')
+                }
+              >
+                {isCorrect ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                {isCorrect ? 'Correct' : 'Incorrect'}
+              </span>
+            )}
+          </div>
+
+          <h2 className="mt-6 text-2xl font-bold leading-tight sm:text-3xl">
+            {card.question}
+          </h2>
+
+          <div className="mt-6 grid gap-3">
+            {card.choices.map((choice, index) => {
+              const isSelected = selected === choice;
+              const shouldShowCorrect = answered && choice === card.answer;
+              const shouldShowWrong =
+                answered && isSelected && choice !== card.answer;
+              let classes = 'border-white/10 bg-white/5 hover:bg-white/10';
+              if (shouldShowCorrect)
+                classes = 'border-emerald-400/40 bg-emerald-400/10';
+              else if (shouldShowWrong)
+                classes = 'border-rose-400/40 bg-rose-400/10';
+              else if (isSelected)
+                classes = 'border-violet-400/50 bg-violet-400/10';
+
+              return (
+                <button
+                  key={choice}
+                  onClick={() => chooseAnswer(choice)}
+                  disabled={answered}
+                  className={
+                    'flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition ' +
+                    classes
+                  }
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-sm font-bold text-slate-300">
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  <span className="pt-1 text-sm font-medium leading-6 text-slate-200 sm:text-base">
+                    {choice}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {answered && (
+            <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <div className="text-sm font-semibold text-slate-200">
+                Explanation
+              </div>
+              <p className="mt-1 text-sm leading-6 text-slate-400">
+                {card.explanation}
+              </p>
+            </div>
+          )}
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-xs text-slate-500">
+              Tip: memorize the differences and commands, then use the scenarios
+              to test your understanding.
+            </div>
+            <button
+              onClick={next}
+              disabled={!answered}
+              className="rounded-xl bg-violet-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next question
+            </button>
+          </div>
+        </section>
+
+        <footer className="py-6 text-center text-xs text-slate-600">
+          80 ADET 1 flashcards • Multiple choice • Immediate feedback
+        </footer>
+      </div>
+    </main>
+  );
+}
+
+export default App;
