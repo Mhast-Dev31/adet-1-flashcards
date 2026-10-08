@@ -1022,7 +1022,7 @@ const CARDS: Card[] = [
   },
   {
     id: 77,
-    topic: 'Exam Scenarios',
+    topic: 'Scenario',
     question:
       'A developer changes a button from blue to red. Which area is most directly involved?',
     choices: [
@@ -1037,7 +1037,7 @@ const CARDS: Card[] = [
   },
   {
     id: 78,
-    topic: 'Exam Scenarios',
+    topic: 'Scenario',
     question:
       'A developer changes the same line on two branches and Git cannot decide which version to keep. What happened?',
     choices: [
@@ -1052,7 +1052,7 @@ const CARDS: Card[] = [
   },
   {
     id: 79,
-    topic: 'Exam Scenarios',
+    topic: 'Scenario',
     question:
       'A website looks good on desktop but is hard to use on a phone. What concept should be applied?',
     choices: [
@@ -1067,7 +1067,7 @@ const CARDS: Card[] = [
   },
   {
     id: 80,
-    topic: 'Exam Scenarios',
+    topic: 'Scenario',
     question:
       'You save staged changes locally, then want to send those commits to GitHub. Which sequence is correct?',
     choices: [
@@ -1087,7 +1087,7 @@ const CARDS: Card[] = [
 
   {
     id: 81,
-    topic: 'Application Development Scenarios',
+    topic: 'Scenario',
     question:
       'A team is building an Android app that students install on their smartphones to check their grades. Which type of application development is this?',
     choices: [
@@ -1102,7 +1102,7 @@ const CARDS: Card[] = [
   },
   {
     id: 82,
-    topic: 'Application Development Scenarios',
+    topic: 'Scenario',
     question:
       'A company wants software that employees install directly on Windows computers to manage inventory without using a browser. Which type of development is most appropriate?',
     choices: [
@@ -1117,7 +1117,7 @@ const CARDS: Card[] = [
   },
   {
     id: 83,
-    topic: 'Application Development Scenarios',
+    topic: 'Scenario',
     question:
       'A developer is creating a service that relies on cloud infrastructure so users can access stored data and services over the internet. Which type of development best matches this?',
     choices: [
@@ -1132,7 +1132,7 @@ const CARDS: Card[] = [
   },
   {
     id: 84,
-    topic: 'Front-End vs Back-End Scenarios',
+    topic: 'Scenario',
     question:
       'A developer changes the navigation menu so users can see a new Home button and a larger Login button. Is this mainly front-end or back-end work?',
     choices: [
@@ -1147,7 +1147,7 @@ const CARDS: Card[] = [
   },
   {
     id: 85,
-    topic: 'HTML Scenarios',
+    topic: 'Scenario',
     question:
       'You are creating a page where the browser should display the title of the website in the browser tab and load a stylesheet. Where should these items normally be placed?',
     choices: [
@@ -1162,7 +1162,7 @@ const CARDS: Card[] = [
   },
   {
     id: 86,
-    topic: 'HTML Scenarios',
+    topic: 'Scenario',
     question:
       'A registration page asks users to enter their email address and password. Which HTML structure is most appropriate for collecting these values?',
     choices: [
@@ -1177,7 +1177,7 @@ const CARDS: Card[] = [
   },
   {
     id: 87,
-    topic: 'CSS Scenarios',
+    topic: 'Scenario',
     question:
       'A website has ten different pages that should all use the same colors, fonts, and spacing. Which CSS approach is the best choice?',
     choices: [
@@ -1192,7 +1192,7 @@ const CARDS: Card[] = [
   },
   {
     id: 88,
-    topic: 'CSS Selectors & Specificity Scenarios',
+    topic: 'Scenario',
     question:
       'An element has class="card" and id="special". There is a .card rule and a #special rule that set different colors. Which color rule wins?',
     choices: [
@@ -1207,7 +1207,7 @@ const CARDS: Card[] = [
   },
   {
     id: 89,
-    topic: 'CSS Cascading Scenarios',
+    topic: 'Scenario',
     question:
       'Two CSS rules both target <p> with the same specificity. The first sets the text to blue and the second sets it to red. What color will appear?',
     choices: [
@@ -1222,7 +1222,7 @@ const CARDS: Card[] = [
   },
   {
     id: 90,
-    topic: 'CSS Box Model Scenarios',
+    topic: 'Scenario',
     question:
       'A developer wants more space between the text inside a button and the button border. Which property should be increased?',
     choices: [
@@ -1237,7 +1237,7 @@ const CARDS: Card[] = [
   },
   {
     id: 91,
-    topic: 'CSS Units Scenarios',
+    topic: 'Scenario',
     question:
       'A heading should scale based on the root HTML font size so that changing the root size can affect it consistently. Which unit is most appropriate?',
     choices: [
@@ -1252,7 +1252,7 @@ const CARDS: Card[] = [
   },
   {
     id: 92,
-    topic: 'CSS Colors & Properties Scenarios',
+    topic: 'Scenario',
     question:
       'A designer wants a red text color with 50% transparency. Which CSS value is appropriate?',
     choices: [
@@ -1267,7 +1267,7 @@ const CARDS: Card[] = [
   },
   {
     id: 93,
-    topic: 'CSS Layout & Positioning Scenarios',
+    topic: 'Scenario',
     question:
       'A support button should remain in the bottom-right corner of the browser window even while the user scrolls. Which position value should be considered?',
     choices: [
@@ -1282,7 +1282,7 @@ const CARDS: Card[] = [
   },
   {
     id: 94,
-    topic: 'Flexbox Scenarios',
+    topic: 'Scenario',
     question:
       'Three menu items are inside a row flex container. You want the first item at the left, the last item at the right, and the remaining space distributed between them. Which declaration should you use?',
     choices: [
@@ -1297,7 +1297,7 @@ const CARDS: Card[] = [
   },
   {
     id: 95,
-    topic: 'Transforms & Hover Scenarios',
+    topic: 'Scenario',
     question:
       'A button should become slightly larger only when the mouse pointer is over it. Which CSS combination is most appropriate?',
     choices: [
@@ -1313,7 +1313,7 @@ const CARDS: Card[] = [
   },
   {
     id: 96,
-    topic: 'Responsive Design Scenarios',
+    topic: 'Scenario',
     question:
       'A website uses a horizontal layout on desktop, but the developer wants the items stacked vertically when the screen is 768px wide or smaller. Which approach should be used?',
     choices: [
@@ -1329,7 +1329,7 @@ const CARDS: Card[] = [
   },
   {
     id: 97,
-    topic: 'Version Control Scenarios',
+    topic: 'Scenario',
     question:
       'You are working on a project and want a system that records previous versions so you can see what changed and restore earlier work. What should you use?',
     choices: [
@@ -1344,7 +1344,7 @@ const CARDS: Card[] = [
   },
   {
     id: 98,
-    topic: 'Git Commands & Branching Scenarios',
+    topic: 'Scenario',
     question:
       'You want to create a new feature branch, switch to it, work on the feature, and later combine it into main. Which sequence best matches the module?',
     choices: [
@@ -1360,7 +1360,7 @@ const CARDS: Card[] = [
   },
   {
     id: 99,
-    topic: 'Merge Conflict Scenarios',
+    topic: 'Scenario',
     question:
       'Two developers edit the same line of code differently on separate branches. When one branch is merged, Git cannot automatically choose which change to keep. What should the team do?',
     choices: [
@@ -1376,7 +1376,7 @@ const CARDS: Card[] = [
   },
   {
     id: 100,
-    topic: 'GitHub & Best Practices Scenarios',
+    topic: 'Scenario',
     question:
       'A student finishes a feature on a branch and wants teammates to review it before it is merged into main. The team also wants clear task tracking and descriptive branch names. Which combination is best?',
     choices: [
